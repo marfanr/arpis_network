@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/home/arfan/belajar-ros2/panworkspace/install/arpis_server/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/install/tachimawari/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/install/tachimawari_interfaces/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/install/keisan/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/install/kansei_interfaces/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/install/arpis_client/include/**",
+                "/opt/ros/foxy/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/src/arpis_client/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/src/arpis_network/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/src/arpis_server/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/src/keisan/include/**",
+                "/home/arfan/belajar-ros2/panworkspace/src/tachimawari/include/**",
+                "/usr/include/**",
+                "${workspaceFolder}/include",
+                "/opt/ros/foxy/include"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}
