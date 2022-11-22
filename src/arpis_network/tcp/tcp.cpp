@@ -47,6 +47,7 @@ void tcp::serve() {
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success bind socket");
         
     this->listen();
+    RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "waiting client....");
     this->accept(1);
 }
 
