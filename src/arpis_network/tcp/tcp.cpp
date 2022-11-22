@@ -22,7 +22,7 @@ tcp::tcp(const char * address, int port) : socket(AF_INET, SOCK_STREAM, 0) {
 }
 
 void tcp::listen() {
-    if (::listen(this->get_socket(), this->maxcon_) < 0)
+    if (::listen(this->get_socket(), this->get_max_con()) < 0)
         RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed listen tcp");
     else
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success listen tcp");
@@ -36,8 +36,12 @@ void tcp::accept(int sockid) {
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success accept connection");
 }
 
-void tcp::set_max_con(int n) {
+void tcp::set_max_con(int n) {    
     this->maxcon_ = n;
+}
+
+int tcp::get_max_con() {
+    return this->maxcon_;
 }
 
 void tcp::serve() {

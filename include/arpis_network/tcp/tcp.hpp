@@ -10,6 +10,7 @@ public:
     tcp(const char * address, int port);
     int receive(char * buffer, int size);
     int send(char * buffer, int size);
+    int get_max_con();
     void set_max_con(int n);
     void serve();
 protected:
