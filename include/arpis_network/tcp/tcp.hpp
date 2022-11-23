@@ -8,14 +8,13 @@ namespace arpis_network {
 
 class tcp : public socket {
 public:
-    tcp(const char * address, int port);    
-    int send(char * buffer, int size);
+    tcp(const char * address, int port);        
     int get_max_con();
     void set_max_con(int n);
     void serve();
     void connect();
     void close();
-    void send(char * buffer);
+    void send(char * buffer, int buffsize);    
     void receive(char * buffer, int buffsize);
 protected:
     void listen();

@@ -50,6 +50,8 @@ int tcp::get_max_con() {
 }
 
 void tcp::serve() {
+    int opt = 1;
+    ::setsockopt(this->get_socket(), SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
     this->bind(0);
     this->listen();
     RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "waiting client....");
@@ -64,14 +66,13 @@ void tcp::connect() {
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success connect to server");
 }
 
-void tcp::send(char * buffer) {    
+void tcp::send(char * buffer, int buffsize) {    
     int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
-    if (::send(socket, buffer, strlen(buffer), 0) < 0)
+    if (::send(socket, buffer, buffsize, 0) < 0)
         RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed send message");
     else
-        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "send: %s", buffer);
-}
-
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "sende");
+} 
 void tcp::receive(char * buffer, int buffsize) {
     int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
     ::read(socket, buffer, buffsize);     
