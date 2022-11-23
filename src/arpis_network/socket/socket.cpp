@@ -24,4 +24,11 @@ int socket::get_socket() {
     return this->socket_;
 }
 
+void socket::bind(int sockid) {
+    if (::bind(this->get_socket(), (sockaddr*)this->get_sockaddr_in(sockid), sizeof(*this->get_sockaddr_in(sockid))) < 0)
+        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed bind socket");
+    else
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success bind socket");    
+}
+
 } // namespace arpis_network

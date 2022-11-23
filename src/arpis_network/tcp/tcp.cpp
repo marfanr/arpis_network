@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <cstring>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include <string>
 #include "arpis_network/tcp/tcp.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -30,7 +31,7 @@ void tcp::listen() {
 
 void tcp::accept(int sockid) {
     socklen_t s = sizeof(*this->get_sockaddr_in(sockid));
-    if (::accept(this->get_socket(), (sockaddr*)this->get_sockaddr_in(sockid), &s) < 0)
+    if ((this->newsocket_ = ::accept(this->get_socket(), (sockaddr*)this->get_sockaddr_in(sockid), &s)) < 0)
         RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed accept connection");
     else
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success accept connection");
@@ -40,19 +41,47 @@ void tcp::set_max_con(int n) {
     this->maxcon_ = n;
 }
 
+int tcp::get_newsocket() {
+    return this->newsocket_;
+}
+
 int tcp::get_max_con() {
     return this->maxcon_;
 }
 
 void tcp::serve() {
-    if (::bind(this->get_socket(), (sockaddr*)this->get_sockaddr_in(0), sizeof(*this->get_sockaddr_in(0))) < 0)
-        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed bind socket");
-    else
-        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success bind socket");
-        
+    this->bind(0);
     this->listen();
     RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "waiting client....");
     this->accept(1);
+    RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "%s has joined server", inet_ntoa((*this->get_sockaddr_in(1)).sin_addr));
+}
+
+void tcp::connect() {
+    if (::connect(this->get_socket(), (sockaddr*)this->get_sockaddr_in(0), sizeof(*this->get_sockaddr_in(0))) < 0)
+        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed connect to server");
+    else
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "success connect to server");
+}
+
+void tcp::send(char * buffer) {    
+    int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
+    if (::send(socket, buffer, strlen(buffer), 0) < 0)
+        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed send message");
+    else
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "send: %s", buffer);
+}
+
+void tcp::receive(char * buffer) {    
+    int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
+    ::read(socket, buffer, sizeof(buffer));     
+}
+
+void tcp::close() {
+    if (::close(this->get_socket()))
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "server closed");
+    if (::shutdown(this->get_socket(), SHUT_RDWR)) 
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "shutdown sockt");
 }
 
 } // namespace arpis_network

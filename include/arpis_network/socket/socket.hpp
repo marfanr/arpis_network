@@ -12,6 +12,7 @@ public:
     void register_sockaddr_in(sockaddr_in * sockaddrin);
     sockaddr_in * get_sockaddr_in(int id);
     int get_socket();
+    void bind(int sockid);
 protected:
 private:
     int socket_;
