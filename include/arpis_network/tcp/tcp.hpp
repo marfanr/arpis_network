@@ -2,6 +2,7 @@
 #define TCP_HPP_
 
 #include "arpis_network/socket/socket.hpp"
+#include <string>
 
 namespace arpis_network {
 
@@ -15,9 +16,9 @@ public:
     void connect();
     void close();
     void send(char * buffer);
-    void receive(char * buffer);
+    void receive(char * buffer, int buffsize);
 protected:
-    void listen();        
+    void listen();
     void accept(int sockid);
     int get_newsocket();    
 private:

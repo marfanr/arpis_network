@@ -72,16 +72,16 @@ void tcp::send(char * buffer) {
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "send: %s", buffer);
 }
 
-void tcp::receive(char * buffer) {    
+void tcp::receive(char * buffer, int buffsize) {
     int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
-    ::read(socket, buffer, sizeof(buffer));     
+    ::read(socket, buffer, buffsize);     
 }
 
 void tcp::close() {
     if (::close(this->get_socket()))
         RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "server closed");
     if (::shutdown(this->get_socket(), SHUT_RDWR)) 
-        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "shutdown sockt");
+        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "shutdown socket");
 }
 
 } // namespace arpis_network
