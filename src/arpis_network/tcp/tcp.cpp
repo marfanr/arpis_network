@@ -69,9 +69,7 @@ void tcp::connect() {
 void tcp::send(char * buffer, int buffsize) {    
     int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
     if (::send(socket, buffer, buffsize, 0) < 0)
-        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed send message");
-    else
-        RCLCPP_INFO(rclcpp::get_logger("arpis_network/tcp"), "sende");
+        RCLCPP_ERROR(rclcpp::get_logger("arpis_network/tcp"), "failed send message");    
 } 
 void tcp::receive(char * buffer, int buffsize) {
     int socket = this->get_newsocket() == 0 ? this->get_socket() : this->get_newsocket();
